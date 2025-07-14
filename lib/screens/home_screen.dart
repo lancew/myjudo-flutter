@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../services/api_service.dart';
 import '../models/user.dart';
-import '../screens/login_screen.dart';
 import '../screens/training_sessions_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,27 +18,59 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadUserData();
+    _loadLocalUserData();
   }
 
-  Future<void> _loadUserData() async {
-    final apiService = Provider.of<ApiService>(context, listen: false);
-    final user = await apiService.getUserData(widget.username);
-
+  Future<void> _loadLocalUserData() async {
+    // Simulate loading delay
+    await Future.delayed(const Duration(milliseconds: 500));
+    
+    // Create mock user data for local-first experience
+    final mockUser = User(
+      id: 1,
+      username: widget.username,
+      email: 'local@example.com',
+      dojo: 'Local Dojo',
+      sessions: 12,
+      sessionsThisMonth: 4,
+      sessionsLastMonth: 6,
+      sessionsThisYear: 45,
+      sessionsLastYear: 38,
+      sessionTypes: {
+        'randori-tachi-waza': 8,
+        'randori-ne-waza': 6,
+        'uchi-komi': 15,
+        'nage-komi': 10,
+        'kata': 3,
+      },
+      techniques: {
+        'o-soto-gari': 25,
+        'seoi-nage': 20,
+        'tai-otoshi': 15,
+        'ko-uchi-gari': 12,
+        'kesa-gatame': 8,
+      },
+      techniquesThisMonth: {
+        'o-soto-gari': 8,
+        'seoi-nage': 6,
+        'tai-otoshi': 4,
+      },
+      techniquesLastMonth: {
+        'o-soto-gari': 10,
+        'seoi-nage': 8,
+        'tai-otoshi': 6,
+      },
+      techniquesThisYear: {
+        'o-soto-gari': 25,
+        'seoi-nage': 20,
+        'tai-otoshi': 15,
+      },
+    );
+    
     setState(() {
-      _user = user;
+      _user = mockUser;
       _isLoading = false;
     });
-  }
-
-  Future<void> _logout() async {
-    final apiService = Provider.of<ApiService>(context, listen: false);
-    await apiService.logout();
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
   }
 
   @override
@@ -51,8 +80,13 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Welcome, ${widget.username}'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              // TODO: Navigate to settings screen
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Settings coming soon')),
+              );
+            },
           ),
         ],
       ),
@@ -61,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : _user == null
               ? const Center(child: Text('Failed to load user data'))
               : RefreshIndicator(
-                  onRefresh: _loadUserData,
+                  onRefresh: _loadLocalUserData,
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(16),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../services/api_service.dart';
 import '../models/training_session.dart';
 import 'package:intl/intl.dart';
 
@@ -25,11 +23,39 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
   }
 
   Future<void> _loadSessions() async {
-    final apiService = Provider.of<ApiService>(context, listen: false);
-    final sessions = await apiService.getTrainingSessions(widget.userId);
-
+    // Simulate loading delay
+    await Future.delayed(const Duration(milliseconds: 500));
+    
+    // Create mock training sessions for local-first experience
+    final mockSessions = [
+      TrainingSession(
+        id: 1,
+        date: DateTime.now().subtract(const Duration(days: 1)).toIso8601String().split('T')[0],
+        dojo: 'Local Dojo',
+        userId: widget.userId,
+        techniques: ['o-soto-gari', 'seoi-nage', 'tai-otoshi'],
+        types: ['randori-tachi-waza', 'uchi-komi'],
+      ),
+      TrainingSession(
+        id: 2,
+        date: DateTime.now().subtract(const Duration(days: 3)).toIso8601String().split('T')[0],
+        dojo: 'Local Dojo',
+        userId: widget.userId,
+        techniques: ['ko-uchi-gari', 'kesa-gatame', 'juji-gatame'],
+        types: ['randori-ne-waza', 'nage-komi'],
+      ),
+      TrainingSession(
+        id: 3,
+        date: DateTime.now().subtract(const Duration(days: 7)).toIso8601String().split('T')[0],
+        dojo: 'Local Dojo',
+        userId: widget.userId,
+        techniques: ['o-goshi', 'uchi-mata', 'osoto-gari'],
+        types: ['kata', 'uchi-komi'],
+      ),
+    ];
+    
     setState(() {
-      _sessions = sessions;
+      _sessions = mockSessions;
       _isLoading = false;
     });
   }
