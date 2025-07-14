@@ -31,27 +31,101 @@ The app is structured using the Model-View-Controller (MVC) pattern with the fol
 ## Setup
 
 ### Prerequisites
-- Flutter SDK (installed)
+- Flutter SDK (3.32.6 or later)
 - Raku backend server running on localhost
+- For Android development: Android Studio, Java 17+
+- For iOS development: Xcode (macOS only)
 
 ### Installation
 
-1. Install dependencies:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/lancew/myjudo-flutter.git
+   cd myjudo-flutter
+   ```
+
+2. **Install dependencies:**
    ```bash
    flutter pub get
    ```
 
-2. Run the app:
+3. **Run the app:**
    ```bash
    # For desktop (Linux)
    flutter run -d linux
    
-   # For Android (requires Android Studio setup)
-   flutter run -d android
+   # For Android emulator
+   flutter run -d emulator-5554
    
-   # For iOS (requires Xcode on macOS)
+   # For iOS simulator (macOS only)
    flutter run -d ios
    ```
+
+## Android Development Setup
+
+### Prerequisites
+- Android Studio (latest version)
+- Java 17 or later
+- Android SDK
+
+### Installation Steps
+
+1. **Install Android Studio:**
+   ```bash
+   # On Arch Linux
+   yay -S android-studio
+   
+   # On Ubuntu/Debian
+   sudo snap install android-studio --classic
+   ```
+
+2. **Install Java 17:**
+   ```bash
+   # On Arch Linux
+   yay -S jdk17-openjdk
+   sudo archlinux-java set java-17-openjdk
+   
+   # On Ubuntu/Debian
+   sudo apt install openjdk-17-jdk
+   ```
+
+3. **Accept Android licenses:**
+   ```bash
+   flutter doctor --android-licenses
+   ```
+
+4. **Install system images and create emulator:**
+   ```bash
+   # Install Android 11 (API 30) system image
+   $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-30;google_apis_playstore;x86_64"
+   
+   # Create emulator
+   flutter emulators --create --name pixel_android30
+   ```
+
+### Running on Android
+
+1. **Check available devices:**
+   ```bash
+   flutter devices
+   ```
+
+2. **Launch emulator:**
+   ```bash
+   flutter emulators --launch pixel_android30
+   ```
+
+3. **Run the app:**
+   ```bash
+   flutter run -d emulator-5554
+   ```
+
+### Troubleshooting
+
+- **If emulator fails to start:** Ensure hardware acceleration is enabled in BIOS
+- **If build fails:** Run `flutter clean` and `flutter pub get`
+- **If licenses not accepted:** Run `flutter doctor --android-licenses`
+- **Check setup:** Run `flutter doctor` to verify all components
 
 ## Backend Integration
 
@@ -108,16 +182,56 @@ To complete the mobile app, you'll need to:
 
 To test the full functionality:
 
-1. Start your Raku backend server:
+1. **Start your Raku backend server:**
    ```bash
    cd /home/lancew/dev/MyJudo
    raku service.p6
    ```
 
-2. Run the Flutter app:
+2. **Run the Flutter app:**
    ```bash
    cd /home/lancew/dev/myjudo_flutter
+   
+   # On desktop
    flutter run -d linux
+   
+   # On Android emulator
+   flutter emulators --launch pixel_android30  # Start emulator first
+   flutter run -d emulator-5554               # Then run app
    ```
 
-The app will connect to the Raku backend running on localhost and you can test login/registration functionality.
+3. **Test the integration:**
+   - The app will connect to the Raku backend running on localhost
+   - You can test login/registration functionality
+   - Note: Some features may not work until JSON API endpoints are implemented
+
+## Quick Start Commands
+
+```bash
+# Check Flutter setup
+flutter doctor
+
+# Check available devices
+flutter devices
+
+# Check available emulators
+flutter emulators
+
+# Launch specific emulator
+flutter emulators --launch pixel_android30
+
+# Run on desktop
+flutter run -d linux
+
+# Run on Android
+flutter run -d emulator-5554
+
+# Hot reload (when app is running)
+r
+
+# Hot restart (when app is running)
+R
+
+# Quit app
+q
+```
