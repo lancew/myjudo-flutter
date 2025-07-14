@@ -26,34 +26,36 @@
 
 ## Immediate Next Steps (High Priority) 🚨
 
-### Backend API Integration
-- [ ] Add JSON API endpoints to Raku backend at `/home/lancew/dev/MyJudo/`:
-  - [ ] `GET /api/user/{username}` - Return user data as JSON instead of HTML
-  - [ ] `GET /api/training-sessions/{userId}` - Return training sessions as JSON
-  - [ ] `POST /api/training-session/add` - Accept JSON payload for new sessions
-  - [ ] `PUT /api/training-session/{id}` - Accept JSON payload for session updates
-  - [ ] `DELETE /api/training-session/{id}` - Delete training session
-
-### Testing Integration
-- [ ] Start Raku backend server: `cd /home/lancew/dev/MyJudo && raku service.p6`
-- [ ] Test Flutter app: `cd /home/lancew/dev/myjudo_flutter && flutter run -d linux`
-- [ ] Verify login/register functionality works
-- [ ] Test API endpoints with actual data
-- [ ] Test Flutter app on Android: `flutter run -d emulator-5554`
+### Local-First Architecture Implementation
+- [ ] Remove authentication requirements (app works without login)
+- [ ] Implement local SQLite database for data storage
+- [ ] Create local data models and repositories
+- [ ] Replace API-dependent screens with local data screens
+- [ ] Implement offline-first user experience
 
 ### UI/UX Fixes
 - [ ] Fix login screen layout overflow on mobile (201 pixels)
 - [ ] Add responsive design for different screen sizes
 - [ ] Optimize UI for mobile-first experience
+- [ ] Convert home screen to work with local data
+- [ ] Update navigation to skip authentication
+
+### Core Local Features
+- [ ] Implement local training session CRUD operations
+- [ ] Add local user profile/settings storage
+- [ ] Create local statistics calculation
+- [ ] Implement local data export (JSON, CSV)
+- [ ] Add local data backup/restore functionality
 
 ## Medium Priority Features 📋
 
-### Additional Screens
+### Additional Screens (Local-First)
 - [ ] Add training session screen with form for creating new sessions
 - [ ] Edit training session screen with pre-populated form
-- [ ] Password reset screen (integrate with existing Raku functionality)
-- [ ] User profile/settings screen
-- [ ] Statistics/analytics screen with charts
+- [ ] User profile/settings screen (local storage)
+- [ ] Statistics/analytics screen with charts from local data
+- [ ] Data export/import screen
+- [ ] Backup/restore screen
 
 ### Enhanced Functionality
 - [ ] Implement technique picker with judo technique categories
@@ -62,12 +64,15 @@
 - [ ] Add validation for duplicate sessions
 - [ ] Implement pull-to-refresh on all list screens
 - [ ] Add search/filter functionality for training sessions
+- [ ] Add local data migration/versioning
 
-### Data Management
-- [ ] Add offline support with local SQLite database
+### Optional Web Sync (Future)
+- [ ] Add optional account creation/login
 - [ ] Implement data synchronization between local and remote
-- [ ] Add data export functionality (CSV, JSON)
-- [ ] Implement data backup/restore features
+- [ ] Add conflict resolution for sync
+- [ ] Implement incremental sync
+- [ ] Add sync status indicators
+- [ ] Handle offline/online state transitions
 
 ## Mobile Development Setup 📱
 
@@ -165,20 +170,18 @@
 ```
 
 ## Backend Integration Status
-- Original Raku backend: `/home/lancew/dev/MyJudo/`
-- Current endpoints work with HTML forms
-- Need to add JSON API endpoints for mobile app integration
-- Session management via cookies is already implemented
+- **Local-First Architecture**: App works completely offline without backend
+- **Local Storage**: SQLite database for all user data and training sessions
+- **Optional Sync**: Raku backend integration will be optional for data sync
+- **Original Raku backend**: `/home/lancew/dev/MyJudo/` (for future sync feature)
+- **No Authentication Required**: Users can start using the app immediately
 
 ## Development Commands
 ```bash
-# Start Raku backend
-cd /home/lancew/dev/MyJudo && raku service.p6
-
-# Run Flutter app on desktop
+# Run Flutter app on desktop (local-first, no backend needed)
 cd /home/lancew/dev/myjudo_flutter && flutter run -d linux
 
-# Run Flutter app on Android emulator
+# Run Flutter app on Android emulator (local-first, no backend needed)
 cd /home/lancew/dev/myjudo_flutter && flutter run -d emulator-5554
 
 # Check available devices
@@ -199,6 +202,9 @@ flutter test
 # Build for release
 flutter build apk --release  # Android
 flutter build ios --release  # iOS
+
+# Optional: Start Raku backend (only needed for future sync feature)
+cd /home/lancew/dev/MyJudo && raku service.p6
 ```
 
 ---
