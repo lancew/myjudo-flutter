@@ -46,10 +46,14 @@ class User {
       sessionsLastYear: json['sessions_last_year'] ?? 0,
       sessionTypes: Map<String, int>.from(json['session_types'] ?? {}),
       techniques: Map<String, int>.from(json['techniques'] ?? {}),
-      techniquesThisMonth: Map<String, int>.from(json['techniques_this_month'] ?? {}),
-      techniquesLastMonth: Map<String, int>.from(json['techniques_last_month'] ?? {}),
-      techniquesThisYear: Map<String, int>.from(json['techniques_this_year'] ?? {}),
-      techniquesLastYear: Map<String, int>.from(json['techniques_last_year'] ?? {}),
+      techniquesThisMonth:
+          Map<String, int>.from(json['techniques_this_month'] ?? {}),
+      techniquesLastMonth:
+          Map<String, int>.from(json['techniques_last_month'] ?? {}),
+      techniquesThisYear:
+          Map<String, int>.from(json['techniques_this_year'] ?? {}),
+      techniquesLastYear:
+          Map<String, int>.from(json['techniques_last_year'] ?? {}),
     );
   }
 

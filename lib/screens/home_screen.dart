@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadUserData() async {
     final apiService = Provider.of<ApiService>(context, listen: false);
     final user = await apiService.getUserData(widget.username);
-    
+
     setState(() {
       _user = user;
       _isLoading = false;
@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _logout() async {
     final apiService = Provider.of<ApiService>(context, listen: false);
     await apiService.logout();
-    
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -98,7 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _buildStatItem('Total Sessions', _user!.sessions.toString()),
-                _buildStatItem('This Month', _user!.sessionsThisMonth.toString()),
+                _buildStatItem(
+                    'This Month', _user!.sessionsThisMonth.toString()),
                 _buildStatItem('This Year', _user!.sessionsThisYear.toString()),
               ],
             ),
@@ -144,7 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     // TODO: Navigate to add session screen
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Add session feature coming soon')),
+                      const SnackBar(
+                          content: Text('Add session feature coming soon')),
                     );
                   },
                 ),
@@ -155,7 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TrainingSessionsScreen(userId: _user!.id),
+                        builder: (context) =>
+                            TrainingSessionsScreen(userId: _user!.id),
                       ),
                     );
                   },
@@ -215,8 +218,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(entry.key.replaceAll('-', ' ').split(' ').map((word) => 
-                          word.isEmpty ? word : word[0].toUpperCase() + word.substring(1)).join(' ')),
+                        Text(entry.key
+                            .replaceAll('-', ' ')
+                            .split(' ')
+                            .map((word) => word.isEmpty
+                                ? word
+                                : word[0].toUpperCase() + word.substring(1))
+                            .join(' ')),
                         Text(entry.value.toString()),
                       ],
                     ),
@@ -250,8 +258,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(entry.key.replaceAll('-', ' ').split(' ').map((word) => 
-                          word.isEmpty ? word : word[0].toUpperCase() + word.substring(1)).join(' ')),
+                        Text(entry.key
+                            .replaceAll('-', ' ')
+                            .split(' ')
+                            .map((word) => word.isEmpty
+                                ? word
+                                : word[0].toUpperCase() + word.substring(1))
+                            .join(' ')),
                         Text(entry.value.toString()),
                       ],
                     ),

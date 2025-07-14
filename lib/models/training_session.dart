@@ -21,11 +21,17 @@ class TrainingSession {
       date: json['date'] ?? '',
       dojo: json['dojo'],
       userId: json['user_id'] ?? 0,
-      techniques: json['techniques'] != null 
-          ? (json['techniques'] as String).split(',').where((t) => t.isNotEmpty).toList()
+      techniques: json['techniques'] != null
+          ? (json['techniques'] as String)
+              .split(',')
+              .where((t) => t.isNotEmpty)
+              .toList()
           : [],
-      types: json['types'] != null 
-          ? (json['types'] as String).split(',').where((t) => t.isNotEmpty).toList()
+      types: json['types'] != null
+          ? (json['types'] as String)
+              .split(',')
+              .where((t) => t.isNotEmpty)
+              .toList()
           : [],
     );
   }

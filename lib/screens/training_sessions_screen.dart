@@ -7,7 +7,8 @@ import 'package:intl/intl.dart';
 class TrainingSessionsScreen extends StatefulWidget {
   final int userId;
 
-  const TrainingSessionsScreen({Key? key, required this.userId}) : super(key: key);
+  const TrainingSessionsScreen({Key? key, required this.userId})
+      : super(key: key);
 
   @override
   State<TrainingSessionsScreen> createState() => _TrainingSessionsScreenState();
@@ -26,7 +27,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
   Future<void> _loadSessions() async {
     final apiService = Provider.of<ApiService>(context, listen: false);
     final sessions = await apiService.getTrainingSessions(widget.userId);
-    
+
     setState(() {
       _sessions = sessions;
       _isLoading = false;
@@ -44,7 +45,8 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
             onPressed: () {
               // TODO: Navigate to add session screen
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Add session feature coming soon')),
+                const SnackBar(
+                    content: Text('Add session feature coming soon')),
               );
             },
           ),
@@ -57,7 +59,8 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.sports_martial_arts, size: 64, color: Colors.grey),
+                      Icon(Icons.sports_martial_arts,
+                          size: 64, color: Colors.grey),
                       SizedBox(height: 16),
                       Text(
                         'No training sessions yet',
@@ -92,7 +95,8 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                DateFormat('MMM dd, yyyy').format(DateTime.parse(session.date)),
+                                DateFormat('MMM dd, yyyy')
+                                    .format(DateTime.parse(session.date)),
                                 style: const TextStyle(color: Colors.grey),
                               ),
                               if (session.techniques.isNotEmpty)
@@ -112,7 +116,9 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                             onPressed: () {
                               // TODO: Navigate to edit session screen
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Edit session feature coming soon')),
+                                const SnackBar(
+                                    content: Text(
+                                        'Edit session feature coming soon')),
                               );
                             },
                           ),
@@ -136,16 +142,21 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Date: ${DateFormat('MMMM dd, yyyy').format(DateTime.parse(session.date))}'),
+            Text(
+                'Date: ${DateFormat('MMMM dd, yyyy').format(DateTime.parse(session.date))}'),
             const SizedBox(height: 8),
             if (session.techniques.isNotEmpty) ...[
-              const Text('Techniques:', style: TextStyle(fontWeight: FontWeight.bold)),
-              ...session.techniques.map((tech) => Text('• ${tech.replaceAll('-', ' ')}')),
+              const Text('Techniques:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              ...session.techniques
+                  .map((tech) => Text('• ${tech.replaceAll('-', ' ')}')),
               const SizedBox(height: 8),
             ],
             if (session.types.isNotEmpty) ...[
-              const Text('Training Types:', style: TextStyle(fontWeight: FontWeight.bold)),
-              ...session.types.map((type) => Text('• ${type.replaceAll('-', ' ')}')),
+              const Text('Training Types:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              ...session.types
+                  .map((type) => Text('• ${type.replaceAll('-', ' ')}')),
             ],
           ],
         ),

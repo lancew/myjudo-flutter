@@ -7,7 +7,7 @@ import '../models/training_session.dart';
 
 class ApiService extends ChangeNotifier {
   static const String baseUrl = 'http://localhost'; // Your Raku backend URL
-  
+
   final http.Client _client = http.Client();
   String? _sessionCookie;
 
@@ -144,7 +144,8 @@ class ApiService extends ChangeNotifier {
     }
   }
 
-  Future<bool> changePassword(String currentPassword, String newPassword) async {
+  Future<bool> changePassword(
+      String currentPassword, String newPassword) async {
     try {
       final response = await _client.post(
         Uri.parse('$baseUrl/password-change'),
