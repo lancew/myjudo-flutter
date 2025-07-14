@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadLocalUserData() async {
     // Simulate loading delay
     await Future.delayed(const Duration(milliseconds: 500));
-    
+
     // Create mock user data for local-first experience
     final mockUser = User(
       id: 1,
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'tai-otoshi': 15,
       },
     );
-    
+
     setState(() {
       _user = mockUser;
       _isLoading = false;

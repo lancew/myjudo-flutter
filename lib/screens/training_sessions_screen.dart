@@ -25,12 +25,15 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
   Future<void> _loadSessions() async {
     // Simulate loading delay
     await Future.delayed(const Duration(milliseconds: 500));
-    
+
     // Create mock training sessions for local-first experience
     final mockSessions = [
       TrainingSession(
         id: 1,
-        date: DateTime.now().subtract(const Duration(days: 1)).toIso8601String().split('T')[0],
+        date: DateTime.now()
+            .subtract(const Duration(days: 1))
+            .toIso8601String()
+            .split('T')[0],
         dojo: 'Local Dojo',
         userId: widget.userId,
         techniques: ['o-soto-gari', 'seoi-nage', 'tai-otoshi'],
@@ -38,7 +41,10 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
       ),
       TrainingSession(
         id: 2,
-        date: DateTime.now().subtract(const Duration(days: 3)).toIso8601String().split('T')[0],
+        date: DateTime.now()
+            .subtract(const Duration(days: 3))
+            .toIso8601String()
+            .split('T')[0],
         dojo: 'Local Dojo',
         userId: widget.userId,
         techniques: ['ko-uchi-gari', 'kesa-gatame', 'juji-gatame'],
@@ -46,14 +52,17 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
       ),
       TrainingSession(
         id: 3,
-        date: DateTime.now().subtract(const Duration(days: 7)).toIso8601String().split('T')[0],
+        date: DateTime.now()
+            .subtract(const Duration(days: 7))
+            .toIso8601String()
+            .split('T')[0],
         dojo: 'Local Dojo',
         userId: widget.userId,
         techniques: ['o-goshi', 'uchi-mata', 'osoto-gari'],
         types: ['kata', 'uchi-komi'],
       ),
     ];
-    
+
     setState(() {
       _sessions = mockSessions;
       _isLoading = false;
