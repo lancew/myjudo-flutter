@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/training_session.dart';
 import 'package:intl/intl.dart';
+import '../services/database_service.dart';
 
 class TrainingSessionsScreen extends StatefulWidget {
   final int userId;
@@ -23,48 +24,13 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
   }
 
   Future<void> _loadSessions() async {
-    // Simulate loading delay
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    // Create mock training sessions for local-first experience
-    final mockSessions = [
-      TrainingSession(
-        id: 1,
-        date: DateTime.now()
-            .subtract(const Duration(days: 1))
-            .toIso8601String()
-            .split('T')[0],
-        dojo: 'Local Dojo',
-        userId: widget.userId,
-        techniques: ['o-soto-gari', 'seoi-nage', 'tai-otoshi'],
-        types: ['randori-tachi-waza', 'uchi-komi'],
-      ),
-      TrainingSession(
-        id: 2,
-        date: DateTime.now()
-            .subtract(const Duration(days: 3))
-            .toIso8601String()
-            .split('T')[0],
-        dojo: 'Local Dojo',
-        userId: widget.userId,
-        techniques: ['ko-uchi-gari', 'kesa-gatame', 'juji-gatame'],
-        types: ['randori-ne-waza', 'nage-komi'],
-      ),
-      TrainingSession(
-        id: 3,
-        date: DateTime.now()
-            .subtract(const Duration(days: 7))
-            .toIso8601String()
-            .split('T')[0],
-        dojo: 'Local Dojo',
-        userId: widget.userId,
-        techniques: ['o-goshi', 'uchi-mata', 'osoto-gari'],
-        types: ['kata', 'uchi-komi'],
-      ),
-    ];
-
     setState(() {
-      _sessions = mockSessions;
+      _isLoading = true;
+    });
+    final dbService = DatabaseService();
+    final sessions = await dbService.getTrainingSessions(widget.userId);
+    setState(() {
+      _sessions = sessions;
       _isLoading = false;
     });
   }
@@ -77,13 +43,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {
-              // TODO: Navigate to add session screen
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text('Add session feature coming soon')),
-              );
-            },
+            onPressed: _showAddSessionDialog,
           ),
         ],
       ),
@@ -146,16 +106,18 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                                 ),
                             ],
                           ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () {
-                              // TODO: Navigate to edit session screen
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Edit session feature coming soon')),
-                              );
-                            },
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () => _showEditSessionDialog(session),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () => _deleteSession(session.id!),
+                              ),
+                            ],
                           ),
                           onTap: () {
                             _showSessionDetails(session);
@@ -203,5 +165,142 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
         ],
       ),
     );
+  }
+
+  void _showAddSessionDialog() async {
+    final _formKey = GlobalKey<FormState>();
+    String date = DateTime.now().toIso8601String().split('T')[0];
+    String dojo = '';
+    String techniques = '';
+    String types = '';
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Add Training Session'),
+        content: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  initialValue: date,
+                  decoration: const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
+                  onChanged: (v) => date = v,
+                  validator: (v) => v == null || v.isEmpty ? 'Enter date' : null,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Dojo'),
+                  onChanged: (v) => dojo = v,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Techniques (comma separated)'),
+                  onChanged: (v) => techniques = v,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Types (comma separated)'),
+                  onChanged: (v) => types = v,
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState?.validate() ?? false) {
+                final session = TrainingSession(
+                  date: date,
+                  dojo: dojo.isEmpty ? null : dojo,
+                  userId: widget.userId,
+                  techniques: techniques.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+                  types: types.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+                );
+                await DatabaseService().addTrainingSession(session);
+                Navigator.pop(context);
+                await _loadSessions();
+              }
+            },
+            child: const Text('Add'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showEditSessionDialog(TrainingSession session) async {
+    final _formKey = GlobalKey<FormState>();
+    String date = session.date;
+    String dojo = session.dojo ?? '';
+    String techniques = session.techniques.join(', ');
+    String types = session.types.join(', ');
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Training Session'),
+        content: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  initialValue: date,
+                  decoration: const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
+                  onChanged: (v) => date = v,
+                  validator: (v) => v == null || v.isEmpty ? 'Enter date' : null,
+                ),
+                TextFormField(
+                  initialValue: dojo,
+                  decoration: const InputDecoration(labelText: 'Dojo'),
+                  onChanged: (v) => dojo = v,
+                ),
+                TextFormField(
+                  initialValue: techniques,
+                  decoration: const InputDecoration(labelText: 'Techniques (comma separated)'),
+                  onChanged: (v) => techniques = v,
+                ),
+                TextFormField(
+                  initialValue: types,
+                  decoration: const InputDecoration(labelText: 'Types (comma separated)'),
+                  onChanged: (v) => types = v,
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState?.validate() ?? false) {
+                final updated = session.copyWith(
+                  date: date,
+                  dojo: dojo.isEmpty ? null : dojo,
+                  techniques: techniques.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+                  types: types.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+                );
+                await DatabaseService().updateTrainingSession(updated);
+                Navigator.pop(context);
+                await _loadSessions();
+              }
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _deleteSession(int id) async {
+    await DatabaseService().deleteTrainingSession(id);
+    await _loadSessions();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../screens/training_sessions_screen.dart';
+import '../services/database_service.dart';
 
 class HomeScreen extends StatefulWidget {
   final String username;
@@ -22,53 +23,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadLocalUserData() async {
-    // Simulate loading delay
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    // Create mock user data for local-first experience
-    final mockUser = User(
-      id: 1,
-      username: widget.username,
-      email: 'local@example.com',
-      dojo: 'Local Dojo',
-      sessions: 12,
-      sessionsThisMonth: 4,
-      sessionsLastMonth: 6,
-      sessionsThisYear: 45,
-      sessionsLastYear: 38,
-      sessionTypes: {
-        'randori-tachi-waza': 8,
-        'randori-ne-waza': 6,
-        'uchi-komi': 15,
-        'nage-komi': 10,
-        'kata': 3,
-      },
-      techniques: {
-        'o-soto-gari': 25,
-        'seoi-nage': 20,
-        'tai-otoshi': 15,
-        'ko-uchi-gari': 12,
-        'kesa-gatame': 8,
-      },
-      techniquesThisMonth: {
-        'o-soto-gari': 8,
-        'seoi-nage': 6,
-        'tai-otoshi': 4,
-      },
-      techniquesLastMonth: {
-        'o-soto-gari': 10,
-        'seoi-nage': 8,
-        'tai-otoshi': 6,
-      },
-      techniquesThisYear: {
-        'o-soto-gari': 25,
-        'seoi-nage': 20,
-        'tai-otoshi': 15,
-      },
-    );
-
+    final dbService = DatabaseService();
+    // Try to get the first user (for single-user local app)
+    User? user;
+    final db = await dbService.database;
+    final users = await db.query('users');
+    if (users.isNotEmpty) {
+      final data = users.first;
+      user = User(
+        id: data['id'] as int,
+        username: data['username'] as String,
+        email: data['email'] as String,
+        dojo: data['dojo'] as String?,
+        // Stats fields can be calculated from sessions if needed
+      );
+    } else {
+      // Create a default user if none exists
+      final defaultUser = User(id: 0, username: widget.username, email: 'local@example.com', dojo: 'Local Dojo');
+      final userId = await dbService.addUser(defaultUser);
+      user = User(id: userId, username: defaultUser.username, email: defaultUser.email, dojo: defaultUser.dojo);
+    }
     setState(() {
-      _user = mockUser;
+      _user = user;
       _isLoading = false;
     });
   }
@@ -177,11 +153,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icons.add,
                   label: 'Add Session',
                   onTap: () {
-                    // TODO: Navigate to add session screen
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Add session feature coming soon')),
-                    );
+                    // Optionally, navigate to training sessions screen or add session dialog
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TrainingSessionsScreen(userId: _user!.id),
+                      ),
+                    ).then((_) => _loadLocalUserData());
                   },
                 ),
                 _buildActionButton(
@@ -191,10 +169,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            TrainingSessionsScreen(userId: _user!.id),
+                        builder: (context) => TrainingSessionsScreen(userId: _user!.id),
                       ),
-                    );
+                    ).then((_) => _loadLocalUserData());
                   },
                 ),
               ],

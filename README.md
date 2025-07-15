@@ -127,23 +127,13 @@ The app is structured using the Model-View-Controller (MVC) pattern with the fol
 - **If licenses not accepted:** Run `flutter doctor --android-licenses`
 - **Check setup:** Run `flutter doctor` to verify all components
 
-## Backend Integration
+## Local-First & Desktop Support
 
-The Flutter app communicates with the existing Raku backend via HTTP requests. The `ApiService` class handles:
-
-- Session-based authentication using cookies
-- RESTful API calls for user data and training sessions
-- Error handling and connection management
-
-### API Endpoints Used
-
-- `POST /login` - User authentication
-- `POST /register` - User registration
-- `GET /logout` - User logout
-- `GET /api/user/{username}` - Get user data (will need to be implemented in Raku backend)
-- `GET /api/training-sessions/{userId}` - Get training sessions (will need to be implemented in Raku backend)
-- `POST /api/training-session/add` - Add training session (will need to be implemented in Raku backend)
-- `PUT /api/training-session/{id}` - Update training session (will need to be implemented in Raku backend)
+- The app is now fully local-first: all data is stored in a local SQLite database.
+- No authentication is required; users can use the app immediately.
+- Works on Linux desktop (and other desktop platforms with sqflite_common_ffi).
+- All training session data and user profile are persisted locally.
+- Backend/API sync is optional and planned for the future.
 
 ## Next Steps
 
