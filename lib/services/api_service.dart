@@ -22,7 +22,6 @@ class ApiService extends ChangeNotifier {
       }
       return null;
     } catch (e) {
-      print('Get user data error: $e');
       return null;
     }
   }
@@ -40,7 +39,6 @@ class ApiService extends ChangeNotifier {
       }
       return [];
     } catch (e) {
-      print('Get training sessions error: $e');
       return [];
     }
   }
@@ -57,7 +55,6 @@ class ApiService extends ChangeNotifier {
 
       return response.statusCode == 201;
     } catch (e) {
-      print('Add training session error: $e');
       return false;
     }
   }
@@ -74,7 +71,6 @@ class ApiService extends ChangeNotifier {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('Update training session error: $e');
       return false;
     }
   }

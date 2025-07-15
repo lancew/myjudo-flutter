@@ -217,6 +217,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState?.validate() ?? false) {
+                final navigator = Navigator.of(context);
                 final session = TrainingSession(
                   date: date,
                   dojo: dojo.isEmpty ? null : dojo,
@@ -234,7 +235,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                 );
                 await DatabaseService().addTrainingSession(session);
                 if (mounted) {
-                  Navigator.pop(context);
+                  navigator.pop();
                   await _loadSessions();
                 }
               }
@@ -299,6 +300,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState?.validate() ?? false) {
+                final navigator = Navigator.of(context);
                 final updated = session.copyWith(
                   date: date,
                   dojo: dojo.isEmpty ? null : dojo,
@@ -315,7 +317,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                 );
                 await DatabaseService().updateTrainingSession(updated);
                 if (mounted) {
-                  Navigator.pop(context);
+                  navigator.pop();
                   await _loadSessions();
                 }
               }
