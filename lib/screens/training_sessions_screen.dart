@@ -185,20 +185,24 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
               children: [
                 TextFormField(
                   initialValue: date,
-                  decoration: const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
+                  decoration:
+                      const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
                   onChanged: (v) => date = v,
-                  validator: (v) => v == null || v.isEmpty ? 'Enter date' : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Enter date' : null,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Dojo'),
                   onChanged: (v) => dojo = v,
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Techniques (comma separated)'),
+                  decoration: const InputDecoration(
+                      labelText: 'Techniques (comma separated)'),
                   onChanged: (v) => techniques = v,
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Types (comma separated)'),
+                  decoration: const InputDecoration(
+                      labelText: 'Types (comma separated)'),
                   onChanged: (v) => types = v,
                 ),
               ],
@@ -217,8 +221,16 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                   date: date,
                   dojo: dojo.isEmpty ? null : dojo,
                   userId: widget.userId,
-                  techniques: techniques.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
-                  types: types.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+                  techniques: techniques
+                      .split(',')
+                      .map((e) => e.trim())
+                      .where((e) => e.isNotEmpty)
+                      .toList(),
+                  types: types
+                      .split(',')
+                      .map((e) => e.trim())
+                      .where((e) => e.isNotEmpty)
+                      .toList(),
                 );
                 await DatabaseService().addTrainingSession(session);
                 if (mounted) {
@@ -252,9 +264,11 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
               children: [
                 TextFormField(
                   initialValue: date,
-                  decoration: const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
+                  decoration:
+                      const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
                   onChanged: (v) => date = v,
-                  validator: (v) => v == null || v.isEmpty ? 'Enter date' : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Enter date' : null,
                 ),
                 TextFormField(
                   initialValue: dojo,
@@ -263,12 +277,14 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                 ),
                 TextFormField(
                   initialValue: techniques,
-                  decoration: const InputDecoration(labelText: 'Techniques (comma separated)'),
+                  decoration: const InputDecoration(
+                      labelText: 'Techniques (comma separated)'),
                   onChanged: (v) => techniques = v,
                 ),
                 TextFormField(
                   initialValue: types,
-                  decoration: const InputDecoration(labelText: 'Types (comma separated)'),
+                  decoration: const InputDecoration(
+                      labelText: 'Types (comma separated)'),
                   onChanged: (v) => types = v,
                 ),
               ],
@@ -286,8 +302,16 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                 final updated = session.copyWith(
                   date: date,
                   dojo: dojo.isEmpty ? null : dojo,
-                  techniques: techniques.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
-                  types: types.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+                  techniques: techniques
+                      .split(',')
+                      .map((e) => e.trim())
+                      .where((e) => e.isNotEmpty)
+                      .toList(),
+                  types: types
+                      .split(',')
+                      .map((e) => e.trim())
+                      .where((e) => e.isNotEmpty)
+                      .toList(),
                 );
                 await DatabaseService().updateTrainingSession(updated);
                 if (mounted) {
