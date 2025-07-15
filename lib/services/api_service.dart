@@ -79,7 +79,9 @@ class ApiService extends ChangeNotifier {
     }
   }
 
+  @override
   void dispose() {
     _client.close();
+    super.dispose();
   }
 }

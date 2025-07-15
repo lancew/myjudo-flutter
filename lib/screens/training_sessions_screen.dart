@@ -6,8 +6,7 @@ import '../services/database_service.dart';
 class TrainingSessionsScreen extends StatefulWidget {
   final int userId;
 
-  const TrainingSessionsScreen({Key? key, required this.userId})
-      : super(key: key);
+  const TrainingSessionsScreen({super.key, required this.userId});
 
   @override
   State<TrainingSessionsScreen> createState() => _TrainingSessionsScreenState();
@@ -169,7 +168,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
   }
 
   void _showAddSessionDialog() async {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     String date = DateTime.now().toIso8601String().split('T')[0];
     String dojo = '';
     String techniques = '';
@@ -179,31 +178,27 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Add Training Session'),
         content: Form(
-          key: _formKey,
+          key: formKey,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
                   initialValue: date,
-                  decoration:
-                      const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
+                  decoration: const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
                   onChanged: (v) => date = v,
-                  validator: (v) =>
-                      v == null || v.isEmpty ? 'Enter date' : null,
+                  validator: (v) => v == null || v.isEmpty ? 'Enter date' : null,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Dojo'),
                   onChanged: (v) => dojo = v,
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: 'Techniques (comma separated)'),
+                  decoration: const InputDecoration(labelText: 'Techniques (comma separated)'),
                   onChanged: (v) => techniques = v,
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: 'Types (comma separated)'),
+                  decoration: const InputDecoration(labelText: 'Types (comma separated)'),
                   onChanged: (v) => types = v,
                 ),
               ],
@@ -217,25 +212,19 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
           ),
           ElevatedButton(
             onPressed: () async {
-              if (_formKey.currentState?.validate() ?? false) {
+              if (formKey.currentState?.validate() ?? false) {
                 final session = TrainingSession(
                   date: date,
                   dojo: dojo.isEmpty ? null : dojo,
                   userId: widget.userId,
-                  techniques: techniques
-                      .split(',')
-                      .map((e) => e.trim())
-                      .where((e) => e.isNotEmpty)
-                      .toList(),
-                  types: types
-                      .split(',')
-                      .map((e) => e.trim())
-                      .where((e) => e.isNotEmpty)
-                      .toList(),
+                  techniques: techniques.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+                  types: types.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
                 );
                 await DatabaseService().addTrainingSession(session);
-                Navigator.pop(context);
-                await _loadSessions();
+                if (mounted) {
+                  Navigator.pop(context);
+                  await _loadSessions();
+                }
               }
             },
             child: const Text('Add'),
@@ -246,7 +235,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
   }
 
   void _showEditSessionDialog(TrainingSession session) async {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     String date = session.date;
     String dojo = session.dojo ?? '';
     String techniques = session.techniques.join(', ');
@@ -256,18 +245,16 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Edit Training Session'),
         content: Form(
-          key: _formKey,
+          key: formKey,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
                   initialValue: date,
-                  decoration:
-                      const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
+                  decoration: const InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
                   onChanged: (v) => date = v,
-                  validator: (v) =>
-                      v == null || v.isEmpty ? 'Enter date' : null,
+                  validator: (v) => v == null || v.isEmpty ? 'Enter date' : null,
                 ),
                 TextFormField(
                   initialValue: dojo,
@@ -276,14 +263,12 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                 ),
                 TextFormField(
                   initialValue: techniques,
-                  decoration: const InputDecoration(
-                      labelText: 'Techniques (comma separated)'),
+                  decoration: const InputDecoration(labelText: 'Techniques (comma separated)'),
                   onChanged: (v) => techniques = v,
                 ),
                 TextFormField(
                   initialValue: types,
-                  decoration: const InputDecoration(
-                      labelText: 'Types (comma separated)'),
+                  decoration: const InputDecoration(labelText: 'Types (comma separated)'),
                   onChanged: (v) => types = v,
                 ),
               ],
@@ -297,24 +282,18 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
           ),
           ElevatedButton(
             onPressed: () async {
-              if (_formKey.currentState?.validate() ?? false) {
+              if (formKey.currentState?.validate() ?? false) {
                 final updated = session.copyWith(
                   date: date,
                   dojo: dojo.isEmpty ? null : dojo,
-                  techniques: techniques
-                      .split(',')
-                      .map((e) => e.trim())
-                      .where((e) => e.isNotEmpty)
-                      .toList(),
-                  types: types
-                      .split(',')
-                      .map((e) => e.trim())
-                      .where((e) => e.isNotEmpty)
-                      .toList(),
+                  techniques: techniques.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+                  types: types.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
                 );
                 await DatabaseService().updateTrainingSession(updated);
-                Navigator.pop(context);
-                await _loadSessions();
+                if (mounted) {
+                  Navigator.pop(context);
+                  await _loadSessions();
+                }
               }
             },
             child: const Text('Save'),
