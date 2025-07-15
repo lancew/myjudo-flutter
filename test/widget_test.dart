@@ -18,16 +18,17 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   });
 
-  testWidgets('MyJudo app builds without crashing', (WidgetTester tester) async {
+  testWidgets('MyJudo app builds without crashing',
+      (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyJudoApp());
 
     // Verify that the app loads without crashing
     expect(find.byType(MaterialApp), findsOneWidget);
-    
+
     // Verify that the home screen is present (even if still loading)
     expect(find.byType(Scaffold), findsOneWidget);
-    
+
     // Verify that the app bar is present
     expect(find.byType(AppBar), findsOneWidget);
   });
