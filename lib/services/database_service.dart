@@ -106,15 +106,26 @@ class DatabaseService {
 
   Future<List<TrainingSession>> getTrainingSessions(int userId) async {
     final db = await database;
-    final maps = await db.query('training_sessions', where: 'user_id = ?', whereArgs: [userId]);
-    return maps.map((data) => TrainingSession(
-      id: data['id'] as int?,
-      date: data['date'] as String,
-      dojo: data['dojo'] as String?,
-      userId: data['user_id'] as int,
-      techniques: (data['techniques'] as String?)?.split(',').where((t) => t.isNotEmpty).toList() ?? [],
-      types: (data['types'] as String?)?.split(',').where((t) => t.isNotEmpty).toList() ?? [],
-    )).toList();
+    final maps = await db
+        .query('training_sessions', where: 'user_id = ?', whereArgs: [userId]);
+    return maps
+        .map((data) => TrainingSession(
+              id: data['id'] as int?,
+              date: data['date'] as String,
+              dojo: data['dojo'] as String?,
+              userId: data['user_id'] as int,
+              techniques: (data['techniques'] as String?)
+                      ?.split(',')
+                      .where((t) => t.isNotEmpty)
+                      .toList() ??
+                  [],
+              types: (data['types'] as String?)
+                      ?.split(',')
+                      .where((t) => t.isNotEmpty)
+                      .toList() ??
+                  [],
+            ))
+        .toList();
   }
 
   Future<int> updateTrainingSession(TrainingSession session) async {
@@ -135,6 +146,7 @@ class DatabaseService {
 
   Future<int> deleteTrainingSession(int id) async {
     final db = await database;
-    return await db.delete('training_sessions', where: 'id = ?', whereArgs: [id]);
+    return await db
+        .delete('training_sessions', where: 'id = ?', whereArgs: [id]);
   }
-} 
+}

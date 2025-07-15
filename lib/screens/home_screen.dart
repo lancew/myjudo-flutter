@@ -39,9 +39,17 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     } else {
       // Create a default user if none exists
-      final defaultUser = User(id: 0, username: widget.username, email: 'local@example.com', dojo: 'Local Dojo');
+      final defaultUser = User(
+          id: 0,
+          username: widget.username,
+          email: 'local@example.com',
+          dojo: 'Local Dojo');
       final userId = await dbService.addUser(defaultUser);
-      user = User(id: userId, username: defaultUser.username, email: defaultUser.email, dojo: defaultUser.dojo);
+      user = User(
+          id: userId,
+          username: defaultUser.username,
+          email: defaultUser.email,
+          dojo: defaultUser.dojo);
     }
     setState(() {
       _user = user;
@@ -157,7 +165,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TrainingSessionsScreen(userId: _user!.id),
+                        builder: (context) =>
+                            TrainingSessionsScreen(userId: _user!.id),
                       ),
                     ).then((_) => _loadLocalUserData());
                   },
@@ -169,7 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TrainingSessionsScreen(userId: _user!.id),
+                        builder: (context) =>
+                            TrainingSessionsScreen(userId: _user!.id),
                       ),
                     ).then((_) => _loadLocalUserData());
                   },
