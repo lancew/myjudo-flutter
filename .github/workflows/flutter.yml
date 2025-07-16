@@ -34,9 +34,6 @@ jobs:
     - name: Build APK
       run: flutter build apk --debug
     
-    - name: Build iOS (without signing)
-      run: flutter build ios --no-codesign
-    
     - name: Build Web
       run: flutter build web
     
