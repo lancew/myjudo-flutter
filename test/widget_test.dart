@@ -28,10 +28,10 @@ void main() {
 
     // Verify that the app loads without crashing
     expect(find.byType(MaterialApp), findsOneWidget);
-    
+
     // Verify that the home screen is present (even if still loading)
     expect(find.byType(Scaffold), findsOneWidget);
-    
+
     // Verify that the app bar is present
     expect(find.byType(AppBar), findsOneWidget);
   });

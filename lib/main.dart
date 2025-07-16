@@ -7,9 +7,10 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   // Initialize FFI only on desktop platforms
-  if (kIsWeb == false && (defaultTargetPlatform == TargetPlatform.linux ||
-      defaultTargetPlatform == TargetPlatform.macOS ||
-      defaultTargetPlatform == TargetPlatform.windows)) {
+  if (kIsWeb == false &&
+      (defaultTargetPlatform == TargetPlatform.linux ||
+          defaultTargetPlatform == TargetPlatform.macOS ||
+          defaultTargetPlatform == TargetPlatform.windows)) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
