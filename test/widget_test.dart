@@ -7,15 +7,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'package:myjudo_flutter/main.dart';
 
 void main() {
   setUpAll(() {
-    // Initialize SQLite FFI for tests
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
+    // Initialize SQLite FFI for tests only on desktop platforms
+    if (kIsWeb == false) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
   });
 
   testWidgets('MyJudo app builds without crashing',
@@ -25,10 +28,10 @@ void main() {
 
     // Verify that the app loads without crashing
     expect(find.byType(MaterialApp), findsOneWidget);
-
+    
     // Verify that the home screen is present (even if still loading)
     expect(find.byType(Scaffold), findsOneWidget);
-
+    
     // Verify that the app bar is present
     expect(find.byType(AppBar), findsOneWidget);
   });

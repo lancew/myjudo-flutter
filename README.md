@@ -105,27 +105,77 @@ The app is structured using the Model-View-Controller (MVC) pattern with the fol
 
 ### Running on Android
 
-1. **Check available devices:**
+1. **Set environment variables (IMPORTANT):**
+   ```bash
+   export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+   export ANDROID_HOME=$HOME/Android/Sdk
+   ```
+
+2. **Check available devices:**
    ```bash
    flutter devices
    ```
 
-2. **Launch emulator:**
+3. **Check available emulators:**
+   ```bash
+   flutter emulators
+   ```
+
+4. **Launch emulator:**
    ```bash
    flutter emulators --launch pixel_android30
    ```
 
-3. **Run the app:**
+5. **Install dependencies (if needed):**
+   ```bash
+   flutter pub get
+   ```
+
+6. **Run the app:**
    ```bash
    flutter run -d emulator-5554
    ```
 
 ### Troubleshooting
 
-- **If emulator fails to start:** Ensure hardware acceleration is enabled in BIOS
-- **If build fails:** Run `flutter clean` and `flutter pub get`
-- **If licenses not accepted:** Run `flutter doctor --android-licenses`
-- **Check setup:** Run `flutter doctor` to verify all components
+#### Common Issues and Solutions
+
+**1. Emulator fails to start with "Cannot find AVD system path" error:**
+   ```bash
+   # Set environment variables
+   export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+   export ANDROID_HOME=$HOME/Android/Sdk
+   
+   # Then try launching again
+   flutter emulators --launch pixel_android30
+   ```
+
+**2. Build fails with "cannot find symbol SqflitePlugin" error:**
+   ```bash
+   # Install dependencies
+   flutter pub get
+   
+   # Clean and rebuild
+   flutter clean
+   flutter pub get
+   flutter run -d emulator-5554
+   ```
+
+**3. Emulator not detected:**
+   ```bash
+   # Check if emulator is running
+   ps aux | grep -i emulator
+   
+   # Wait for emulator to fully start (can take 1-2 minutes)
+   flutter devices
+   ```
+
+**4. General troubleshooting:**
+   - **If emulator fails to start:** Ensure hardware acceleration is enabled in BIOS
+   - **If build fails:** Run `flutter clean` and `flutter pub get`
+   - **If licenses not accepted:** Run `flutter doctor --android-licenses`
+   - **Check setup:** Run `flutter doctor` to verify all components
+   - **Memory issues:** Close other applications to free up RAM for emulator
 
 ## Local-First & Desktop Support
 
@@ -174,13 +224,13 @@ To test the full functionality:
 
 1. **Start your Raku backend server:**
    ```bash
-   cd /home/lancew/dev/MyJudo
+   cd /path/to/MyJudo
    raku service.p6
    ```
 
 2. **Run the Flutter app:**
    ```bash
-   cd /home/lancew/dev/myjudo_flutter
+   cd /path/to/myjudo_flutter
    
    # On desktop
    flutter run -d linux
@@ -198,6 +248,10 @@ To test the full functionality:
 ## Quick Start Commands
 
 ```bash
+# Set environment variables (IMPORTANT for Android)
+export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+export ANDROID_HOME=$HOME/Android/Sdk
+
 # Check Flutter setup
 flutter doctor
 
@@ -209,6 +263,9 @@ flutter emulators
 
 # Launch specific emulator
 flutter emulators --launch pixel_android30
+
+# Install dependencies
+flutter pub get
 
 # Run on desktop
 flutter run -d linux
