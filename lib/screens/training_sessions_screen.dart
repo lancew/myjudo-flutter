@@ -8,7 +8,8 @@ class TrainingSessionsScreen extends StatefulWidget {
   final int userId;
   final ITrainingSessionService? databaseService;
 
-  const TrainingSessionsScreen({super.key, required this.userId, this.databaseService});
+  const TrainingSessionsScreen(
+      {super.key, required this.userId, this.databaseService});
 
   @override
   State<TrainingSessionsScreen> createState() => _TrainingSessionsScreenState();
@@ -215,11 +216,14 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                   onChanged: (v) => types = v,
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: 'Duration (minutes)'),
+                  decoration:
+                      const InputDecoration(labelText: 'Duration (minutes)'),
                   keyboardType: TextInputType.number,
                   onChanged: (v) => duration = v,
-                  validator: (v) => v == null || v.isEmpty || int.tryParse(v) == null || int.parse(v) <= 0
+                  validator: (v) => v == null ||
+                          v.isEmpty ||
+                          int.tryParse(v) == null ||
+                          int.parse(v) <= 0
                       ? 'Enter duration in minutes'
                       : null,
                 ),
@@ -310,11 +314,14 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                 ),
                 TextFormField(
                   initialValue: duration,
-                  decoration: const InputDecoration(
-                      labelText: 'Duration (minutes)'),
+                  decoration:
+                      const InputDecoration(labelText: 'Duration (minutes)'),
                   keyboardType: TextInputType.number,
                   onChanged: (v) => duration = v,
-                  validator: (v) => v == null || v.isEmpty || int.tryParse(v) == null || int.parse(v) <= 0
+                  validator: (v) => v == null ||
+                          v.isEmpty ||
+                          int.tryParse(v) == null ||
+                          int.parse(v) <= 0
                       ? 'Enter duration in minutes'
                       : null,
                 ),

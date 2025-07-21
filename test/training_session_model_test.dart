@@ -48,4 +48,4 @@ void main() {
       expect(updated.techniques, ['uchi-mata']);
     });
   });
-} 
+}

@@ -43,7 +43,8 @@ void main() {
     fakeDbService = FakeDatabaseService();
   });
 
-  testWidgets('Add training session with duration', (WidgetTester tester) async {
+  testWidgets('Add training session with duration',
+      (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
       home: TrainingSessionsScreen(userId: 1, databaseService: fakeDbService),
     ));
@@ -53,11 +54,18 @@ void main() {
     await tester.pumpAndSettle();
 
     // Enter values in the form
-    await tester.enterText(find.widgetWithText(TextFormField, 'Date (YYYY-MM-DD)'), '2024-06-01');
-    await tester.enterText(find.widgetWithText(TextFormField, 'Dojo'), 'Test Dojo');
-    await tester.enterText(find.widgetWithText(TextFormField, 'Techniques (comma separated)'), 'uchi-mata');
-    await tester.enterText(find.widgetWithText(TextFormField, 'Types (comma separated)'), 'randori');
-    await tester.enterText(find.widgetWithText(TextFormField, 'Duration (minutes)'), '90');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Date (YYYY-MM-DD)'), '2024-06-01');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Dojo'), 'Test Dojo');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Techniques (comma separated)'),
+        'uchi-mata');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Types (comma separated)'),
+        'randori');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Duration (minutes)'), '90');
 
     // Tap the Add button
     await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
@@ -67,4 +75,4 @@ void main() {
     expect(find.text('Test Dojo'), findsOneWidget);
     expect(find.text('Duration: 90 min'), findsOneWidget);
   });
-} 
+}

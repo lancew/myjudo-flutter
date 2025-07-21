@@ -44,4 +44,4 @@ void main() {
       expect(user.sessionTypes, isEmpty);
     });
   });
-} 
+}

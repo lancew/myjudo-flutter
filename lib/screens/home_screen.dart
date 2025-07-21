@@ -128,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     'This Month', _user!.sessionsThisMonth.toString()),
                 _buildStatItem('This Year', _user!.sessionsThisYear.toString()),
                 _buildStatItem('Total Duration',
-                  '${_totalDuration} min\n(${(_totalDuration / 60).toStringAsFixed(1)} h)'),
+                    '${_totalDuration} min\n(${(_totalDuration / 60).toStringAsFixed(1)} h)'),
               ],
             ),
           ],
