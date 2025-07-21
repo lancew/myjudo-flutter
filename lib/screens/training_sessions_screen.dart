@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/training_session.dart';
 import 'package:intl/intl.dart';
 import '../services/database_service.dart';
-import '../services/database_service.dart' show ITrainingSessionService;
 
 class TrainingSessionsScreen extends StatefulWidget {
   final int userId;

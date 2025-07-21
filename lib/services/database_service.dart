@@ -101,6 +101,7 @@ class DatabaseService implements ITrainingSessionService {
   }
 
   // TrainingSession CRUD
+  @override
   Future<int> addTrainingSession(TrainingSession session) async {
     final db = await database;
     return await db.insert('training_sessions', {
@@ -113,6 +114,7 @@ class DatabaseService implements ITrainingSessionService {
     });
   }
 
+  @override
   Future<List<TrainingSession>> getTrainingSessions(int userId) async {
     final db = await database;
     final maps = await db
@@ -138,6 +140,7 @@ class DatabaseService implements ITrainingSessionService {
         .toList();
   }
 
+  @override
   Future<int> updateTrainingSession(TrainingSession session) async {
     final db = await database;
     return await db.update(
@@ -155,6 +158,7 @@ class DatabaseService implements ITrainingSessionService {
     );
   }
 
+  @override
   Future<int> deleteTrainingSession(int id) async {
     final db = await database;
     return await db
