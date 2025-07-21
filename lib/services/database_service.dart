@@ -3,7 +3,14 @@ import 'package:path/path.dart';
 import '../models/user.dart';
 import '../models/training_session.dart';
 
-class DatabaseService {
+abstract class ITrainingSessionService {
+  Future<int> addTrainingSession(TrainingSession session);
+  Future<List<TrainingSession>> getTrainingSessions(int userId);
+  Future<int> updateTrainingSession(TrainingSession session);
+  Future<int> deleteTrainingSession(int id);
+}
+
+class DatabaseService implements ITrainingSessionService {
   static final DatabaseService _instance = DatabaseService._internal();
   factory DatabaseService() => _instance;
   DatabaseService._internal();

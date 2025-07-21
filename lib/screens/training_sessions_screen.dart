@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import '../models/training_session.dart';
 import 'package:intl/intl.dart';
 import '../services/database_service.dart';
+import '../services/database_service.dart' show ITrainingSessionService;
 
 class TrainingSessionsScreen extends StatefulWidget {
   final int userId;
+  final ITrainingSessionService? databaseService;
 
-  const TrainingSessionsScreen({super.key, required this.userId});
+  const TrainingSessionsScreen({super.key, required this.userId, this.databaseService});
 
   @override
   State<TrainingSessionsScreen> createState() => _TrainingSessionsScreenState();
@@ -15,10 +17,12 @@ class TrainingSessionsScreen extends StatefulWidget {
 class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
   List<TrainingSession> _sessions = [];
   bool _isLoading = true;
+  late final ITrainingSessionService _dbService;
 
   @override
   void initState() {
     super.initState();
+    _dbService = widget.databaseService ?? DatabaseService();
     _loadSessions();
   }
 
@@ -26,8 +30,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
     setState(() {
       _isLoading = true;
     });
-    final dbService = DatabaseService();
-    final sessions = await dbService.getTrainingSessions(widget.userId);
+    final sessions = await _dbService.getTrainingSessions(widget.userId);
     setState(() {
       _sessions = sessions;
       _isLoading = false;
@@ -249,7 +252,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                       .toList(),
                   duration: int.parse(duration),
                 );
-                await DatabaseService().addTrainingSession(session);
+                await _dbService.addTrainingSession(session);
                 if (mounted) {
                   navigator.pop();
                   await _loadSessions();
@@ -343,7 +346,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                       .toList(),
                   duration: int.parse(duration),
                 );
-                await DatabaseService().updateTrainingSession(updated);
+                await _dbService.updateTrainingSession(updated);
                 if (mounted) {
                   navigator.pop();
                   await _loadSessions();
@@ -358,7 +361,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
   }
 
   void _deleteSession(int id) async {
-    await DatabaseService().deleteTrainingSession(id);
+    await _dbService.deleteTrainingSession(id);
     await _loadSessions();
   }
 }
