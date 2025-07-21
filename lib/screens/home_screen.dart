@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   User? _user;
   bool _isLoading = true;
+  int _totalDuration = 0;
 
   @override
   void initState() {
@@ -51,8 +52,15 @@ class _HomeScreenState extends State<HomeScreen> {
           email: defaultUser.email,
           dojo: defaultUser.dojo);
     }
+    // Calculate total duration
+    int totalDuration = 0;
+    if (user != null) {
+      final sessions = await dbService.getTrainingSessions(user.id);
+      totalDuration = sessions.fold(0, (sum, s) => sum + (s.duration));
+    }
     setState(() {
       _user = user;
+      _totalDuration = totalDuration;
       _isLoading = false;
     });
   }
@@ -119,6 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 _buildStatItem(
                     'This Month', _user!.sessionsThisMonth.toString()),
                 _buildStatItem('This Year', _user!.sessionsThisYear.toString()),
+                _buildStatItem('Total Duration',
+                  '${_totalDuration} min\n(${(_totalDuration / 60).toStringAsFixed(1)} h)'),
               ],
             ),
           ],

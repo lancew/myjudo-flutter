@@ -43,6 +43,7 @@ class DatabaseService {
         user_id INTEGER NOT NULL,
         techniques TEXT,
         types TEXT,
+        duration INTEGER,
         FOREIGN KEY(user_id) REFERENCES users(id)
       )
     ''');
@@ -101,6 +102,7 @@ class DatabaseService {
       'user_id': session.userId,
       'techniques': session.techniques.join(','),
       'types': session.types.join(','),
+      'duration': session.duration,
     });
   }
 
@@ -124,6 +126,7 @@ class DatabaseService {
                       .where((t) => t.isNotEmpty)
                       .toList() ??
                   [],
+              duration: data['duration'] as int? ?? 0,
             ))
         .toList();
   }
@@ -138,6 +141,7 @@ class DatabaseService {
         'user_id': session.userId,
         'techniques': session.techniques.join(','),
         'types': session.types.join(','),
+        'duration': session.duration,
       },
       where: 'id = ?',
       whereArgs: [session.id],

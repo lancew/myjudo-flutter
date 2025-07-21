@@ -93,6 +93,10 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                                     .format(DateTime.parse(session.date)),
                                 style: const TextStyle(color: Colors.grey),
                               ),
+                              Text(
+                                'Duration: ${session.duration} min',
+                                style: const TextStyle(fontSize: 12),
+                              ),
                               if (session.techniques.isNotEmpty)
                                 Text(
                                   'Techniques: ${session.techniques.take(3).join(', ')}${session.techniques.length > 3 ? '...' : ''}',
@@ -141,6 +145,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
           children: [
             Text(
                 'Date: ${DateFormat('MMMM dd, yyyy').format(DateTime.parse(session.date))}'),
+            Text('Duration: ${session.duration} min'),
             const SizedBox(height: 8),
             if (session.techniques.isNotEmpty) ...[
               const Text('Techniques:',
@@ -173,6 +178,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
     String dojo = '';
     String techniques = '';
     String types = '';
+    String duration = '';
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -205,6 +211,15 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                       labelText: 'Types (comma separated)'),
                   onChanged: (v) => types = v,
                 ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                      labelText: 'Duration (minutes)'),
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => duration = v,
+                  validator: (v) => v == null || v.isEmpty || int.tryParse(v) == null || int.parse(v) <= 0
+                      ? 'Enter duration in minutes'
+                      : null,
+                ),
               ],
             ),
           ),
@@ -232,6 +247,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                       .map((e) => e.trim())
                       .where((e) => e.isNotEmpty)
                       .toList(),
+                  duration: int.parse(duration),
                 );
                 await DatabaseService().addTrainingSession(session);
                 if (mounted) {
@@ -253,6 +269,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
     String dojo = session.dojo ?? '';
     String techniques = session.techniques.join(', ');
     String types = session.types.join(', ');
+    String duration = session.duration.toString();
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -288,6 +305,16 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                       labelText: 'Types (comma separated)'),
                   onChanged: (v) => types = v,
                 ),
+                TextFormField(
+                  initialValue: duration,
+                  decoration: const InputDecoration(
+                      labelText: 'Duration (minutes)'),
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => duration = v,
+                  validator: (v) => v == null || v.isEmpty || int.tryParse(v) == null || int.parse(v) <= 0
+                      ? 'Enter duration in minutes'
+                      : null,
+                ),
               ],
             ),
           ),
@@ -314,6 +341,7 @@ class _TrainingSessionsScreenState extends State<TrainingSessionsScreen> {
                       .map((e) => e.trim())
                       .where((e) => e.isNotEmpty)
                       .toList(),
+                  duration: int.parse(duration),
                 );
                 await DatabaseService().updateTrainingSession(updated);
                 if (mounted) {

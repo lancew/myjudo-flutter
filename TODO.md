@@ -44,6 +44,7 @@
 
 ### Core Local Features
 - [x] Implement local training session CRUD operations
+- [x] Add duration to each training session
 - [ ] Add local user profile/settings storage
 - [ ] Create local statistics calculation
 - [ ] Implement local data export (JSON, CSV)

@@ -5,6 +5,7 @@ class TrainingSession {
   final int userId;
   final List<String> techniques;
   final List<String> types;
+  final int duration; // duration in minutes
 
   TrainingSession({
     this.id,
@@ -13,6 +14,7 @@ class TrainingSession {
     required this.userId,
     this.techniques = const [],
     this.types = const [],
+    required this.duration,
   });
 
   factory TrainingSession.fromJson(Map<String, dynamic> json) {
@@ -33,6 +35,7 @@ class TrainingSession {
               .where((t) => t.isNotEmpty)
               .toList()
           : [],
+      duration: json['duration'] ?? 0,
     );
   }
 
@@ -44,6 +47,7 @@ class TrainingSession {
       'user_id': userId,
       'techniques': techniques.join(','),
       'types': types.join(','),
+      'duration': duration,
     };
   }
 
@@ -54,6 +58,7 @@ class TrainingSession {
     int? userId,
     List<String>? techniques,
     List<String>? types,
+    int? duration,
   }) {
     return TrainingSession(
       id: id ?? this.id,
@@ -62,6 +67,7 @@ class TrainingSession {
       userId: userId ?? this.userId,
       techniques: techniques ?? this.techniques,
       types: types ?? this.types,
+      duration: duration ?? this.duration,
     );
   }
 }
