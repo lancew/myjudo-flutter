@@ -282,3 +282,7 @@ R
 # Quit app
 q
 ```
+
+## Coding Rules
+
+Please see [CODING_RULES.md](./CODING_RULES.md) for project coding standards and contribution guidelines. All contributions must follow these rules.
